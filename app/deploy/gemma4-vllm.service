@@ -1,0 +1,15 @@
+[Unit]
+Description=Gemma4-12B vLLM OpenAI API
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/gemma4_learning_agent
+Environment=HF_HOME=/opt/gemma4_learning_agent/.cache/huggingface
+ExecStart=/root/miniconda3/envs/gemma4_vllm/bin/vllm serve /opt/gemma4_learning_agent/models/gemma/gemma-4-12B-it --host 127.0.0.1 --port 8001 --dtype bfloat16 --gpu-memory-utilization 0.88 --max-model-len 8192
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

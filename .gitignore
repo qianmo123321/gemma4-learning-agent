@@ -1,0 +1,84 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Env
+.env
+.venv/
+venv/
+conda_envs/
+
+# Model and cache
+models/
+cache/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.gguf
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+app/backend/data/*.db
+
+# Runtime data
+app/backend/data/learning_agent.db
+app/backend/data/chroma/
+app/backend/data/vector_store/
+app/backend/data/uploads/
+app/backend/data/logs/
+app/backend/logs/
+
+# Training output
+outputs/
+runs/
+checkpoints/
+wandb/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+dist/
+
+# Temporary unpack folders
+_unpack/
+frontend_polished_unpack/
+
+# Uploaded archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# Backup / temporary files
+*.bak
+*.bak_*
+*.save
+*_backup_*/
+*_unpack/
+frontend_polished_unpack/
+_unpack/
+
+# Runtime RAG / history data
+app/backend/data/*.joblib
+app/backend/data/qa_history.jsonl
+app/backend/data/*.jsonl
+
+# Local training exports
+training_data/lora_train_v1.jsonl
+
+# Optional large/generated training artifacts
+training_data/**/*.zip
+training_data/**/checkpoints/
+training_data/**/outputs/

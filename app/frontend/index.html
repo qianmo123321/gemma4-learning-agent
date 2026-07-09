@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Gemma4 私域学习智能体</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <a class="brand" href="#" aria-label="Gemma4 私域学习智能体首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M13.5 26.2c0-8 4.6-13.2 10.5-13.2 4.4 0 7.8 2.3 9.4 6.4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M34.5 21.8c0 8-4.6 13.2-10.5 13.2-4.4 0-7.8-2.3-9.4-6.4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="14" cy="34" r="3" fill="currentColor"/><circle cx="34" cy="14" r="3" fill="currentColor"/></svg>
+          </span>
+          <span class="brand-copy"><strong>Gemma4 学习智能体</strong><small>RAG · LoRA · Agent</small></span>
+        </a>
+
+        <button id="newChatBtn" class="new-chat" type="button">
+          <span class="plus">＋</span><span>新建对话</span><kbd>⌘ K</kbd>
+        </button>
+      </div>
+
+      <div class="history-wrap">
+        <div class="sidebar-section-head"><span>最近对话</span><button id="clearHistoryBtn" title="清空会话列表" type="button">···</button></div>
+        <div id="historyList" class="history"></div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="service-card">
+          <span class="status-dot" id="statusDot"></span>
+          <div><small>模型服务</small><b id="statusText">连接中…</b></div>
+          <span class="service-badge">私有部署</span>
+        </div>
+        <p class="privacy-note">你的课程资料仅用于当前私域知识库。</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenuBtn" type="button" aria-label="打开侧边栏">☰</button>
+        <div class="page-title"><span class="eyebrow">GEMMA4 LEARNING WORKSPACE</span><h1>私域学习智能体工作台</h1></div>
+        <div class="top-actions">
+          <button id="knowledgeBtn" class="outline" type="button"><span>▣</span> 知识库管理</button>
+          <div class="avatar" title="当前用户">学</div>
+        </div>
+      </header>
+
+      <section class="content">
+        <section class="hero-card">
+          <div class="hero-copy">
+            <div class="hero-kicker"><span class="live-dot"></span> 已开启私域知识增强</div>
+            <h2>让模型 <em>懂你的资料</em>，陪你持续学习</h2>
+            <p>基于个人课程资料进行检索、问答、规划与陪练；每一次高质量反馈都能沉淀为后续优化线索。</p>
+            <div class="capability-chips"><span>知识库检索</span><span>多轮追问</span><span>学习规划</span><span>学习反馈</span></div>
+          </div>
+          <div class="metric-grid">
+            <article><div class="metric-icon blue">▤</div><div><b id="fileMetric">0</b><span>知识库文件</span></div></article>
+            <article><div class="metric-icon violet">◫</div><div><b id="chunkMetric">0</b><span>可检索片段</span></div></article>
+            <article><div class="metric-icon green">✦</div><div><b>4</b><span>学习智能体</span></div></article>
+          </div>
+        </section>
+
+        <section class="workspace-head">
+          <div>
+            <span class="eyebrow">LEARNING ASSISTANT</span>
+            <h2 id="modeHeading">多轮 AI 问答</h2>
+          </div>
+          <div class="mode-tip" id="modeTip">基于你的资料回答问题，并支持连续追问。</div>
+        </section>
+
+        <nav class="tabs" aria-label="选择智能体模式">
+          <button class="tab active" data-mode="qa" type="button"><span class="tab-icon">⌁</span><span><b>AI 问答</b><small>知识解释与追问</small></span></button>
+          <button class="tab" data-mode="learning_path" type="button"><span class="tab-icon">↗</span><span><b>学习路径</b><small>目标拆解与计划</small></span></button>
+          <button class="tab" data-mode="quiz" type="button"><span class="tab-icon">?</span><span><b>AI 出题</b><small>检测掌握程度</small></span></button>
+          <button class="tab" data-mode="coach" type="button"><span class="tab-icon">◎</span><span><b>AI 陪练</b><small>苏格拉底式引导</small></span></button>
+        </nav>
+
+        <section class="chat-card">
+          <div class="chat-card-head">
+            <div><span class="assistant-dot"></span><b id="assistantName">Gemma4 学习助教</b><small id="assistantSub">已连接私域知识库</small></div>
+            <span class="session-label">当前会话</span>
+          </div>
+
+          <div id="chatMessages" class="messages" aria-live="polite"></div>
+
+          <div class="control-bar">
+            <div class="control-group"><label for="topK">RAG 证据数</label><input id="topK" type="range" min="0" max="5" value="3"><output id="topKValue">3</output></div>
+            <div class="control-group"><label for="maxTokens">回答长度</label><input id="maxTokens" type="range" min="128" max="2048" step="64" value="768"><output id="maxTokensValue">768</output></div>
+            <label class="rag-switch"><input id="useRag" type="checkbox" checked><span></span>启用 RAG 检索</label>
+          </div>
+
+          <div class="composer-wrap">
+            <div class="composer">
+              <textarea id="userInput" placeholder="输入你的问题；支持基于上一轮内容继续追问…" rows="1"></textarea>
+              <button id="sendBtn" class="send-btn" type="button"><span>发送</span><svg viewBox="0 0 20 20" fill="none"><path d="M4 10h11M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="composer-hint"><span>Enter 发送</span><i></i><span>Shift + Enter 换行</span><i></i><span>你的资料不会被用于公共训练</span></div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="knowledgeDialog">
+    <div class="dialog-head"><div><span class="eyebrow">PRIVATE KNOWLEDGE BASE</span><h2>知识库管理</h2><p>上传后系统会自动切块并建立混合检索索引。</p></div><button id="closeKnowledgeBtn" type="button" aria-label="关闭">×</button></div>
+    <form id="uploadForm" class="upload">
+      <input id="knowledgeFile" type="file" accept=".txt,.md,.csv" required>
+      <div class="upload-copy"><b>选择课程资料</b><small>当前支持 TXT、MD、CSV，单个文件不超过 30 MB。</small></div>
+      <button type="submit">上传并构建索引</button>
+    </form>
+    <div class="source-title"><span>已入库资料</span><small>上传新文件会自动刷新索引</small></div>
+    <div id="sourceList" class="source-list"></div>
+  </dialog>
+
+  <script>window.__API_BASE__ = "/api";</script>
+  <script src="./app.js"></script>
+</body>
+</html>

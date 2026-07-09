@@ -1,0 +1,9 @@
+torch
+transformers>=4.57.0
+peft>=0.14.0
+accelerate>=1.2.0
+bitsandbytes>=0.45.0
+pandas>=2.2.0
+sentencepiece
+safetensors
+pillow

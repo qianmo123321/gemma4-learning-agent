@@ -1,0 +1,15 @@
+[Unit]
+Description=Gemma4 Learning Agent FastAPI
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/gemma4_learning_agent/backend
+EnvironmentFile=/opt/gemma4_learning_agent/backend/.env
+ExecStart=/root/miniconda3/envs/gemma4_web/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
