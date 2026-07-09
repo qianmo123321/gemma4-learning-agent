@@ -1,43 +1,42 @@
-# Gemma4 Private Learning Agent
+# Gemma4 私有学习智能体
 
-A private AI learning assistant prototype built with **Gemma4**, **vLLM**, **FastAPI**, **RAG**, persistent conversation memory, feedback collection, and LoRA dataset export.
+本项目是一个基于 **Gemma4 + vLLM + FastAPI + RAG + LoRA 数据闭环** 的私有学习智能体原型系统。
 
-This project is designed as an educational AI agent for beginner-friendly artificial intelligence learning. It supports private knowledge retrieval, web-based interaction, conversation history, response quality feedback, and high-quality sample collection for future LoRA fine-tuning.
+系统面向人工智能入门学习场景，支持本地大模型推理、私有知识库问答、网页交互、对话历史保存、回答质量反馈，以及高质量样本导出用于后续 LoRA 微调。
 
 ---
 
-## Overview
+## 一、项目目标
 
-The system aims to build a closed-loop learning assistant:
+本项目希望构建一个面向学习场景的闭环式 AI 助教系统：
 
 ```text
-Private Knowledge Base
-        ↓
-RAG Retrieval
-        ↓
-Gemma4 Inference
-        ↓
-Web Learning Assistant
-        ↓
-Conversation Memory + Feedback
-        ↓
-LoRA Training Data Export
+私有知识库
+    ↓
+RAG 检索增强
+    ↓
+Gemma4 本地推理
+    ↓
+网页学习助手
+    ↓
+对话记忆与质量反馈
+    ↓
+LoRA 微调数据导出
+系统不仅用于回答问题，还可以持续收集高质量问答样本，为后续模型微调和行为风格优化提供数据基础。
 
-The core idea is not only to answer questions, but also to collect high-quality interaction data that can later be used to improve the assistant's behavior through LoRA fine-tuning.
-
-Features
-Local Gemma4 inference with vLLM
-FastAPI backend
-Lightweight web frontend
-RAG-based private knowledge retrieval
-Markdown knowledge base support
-Persistent conversation history with SQLite
-Conversation rename, delete, and export
-Message-level response quality feedback
-Training sample selection for LoRA
-LoRA dataset export script
-Deployment scripts for web backend, vLLM, Nginx, and systemd
-Project Structure
+二、核心功能
+基于 vLLM 的本地 Gemma4 推理
+FastAPI 后端服务
+轻量级 Web 前端界面
+RAG 私有知识库检索增强问答
+Markdown 知识库文件支持
+SQLite 持久化对话历史
+会话重命名、删除与导出
+回答质量评分
+LoRA 训练样本标记
+高质量样本导出为 JSONL
+提供 Nginx、systemd、vLLM 等部署脚本
+三、项目结构
 gemma4_learning_agent/
 ├── app/
 │   ├── backend/
@@ -80,32 +79,34 @@ gemma4_learning_agent/
 │
 ├── .gitignore
 └── README.md
-Main Modules
-1. RAG Knowledge Assistant
+四、主要模块
+1. RAG 私有知识库问答
 
-The system supports a local Markdown-based knowledge base. Documents are loaded, chunked, indexed, and retrieved according to user questions. Retrieved evidence is passed into the model context to improve grounding.
+系统支持本地 Markdown 知识库。后端会对知识库文档进行加载、切块、索引和检索，并将相关内容作为上下文传入大模型，提高回答的依据性。
 
-Example knowledge files are stored in:
+示例知识库目录：
 
 app/backend/data/knowledge/
 
-The current sample knowledge base focuses on beginner-level artificial intelligence learning, including:
+当前示例知识库主要面向人工智能小白学习，包括：
 
-AI fundamentals
-Python learning path
-Data processing
-Machine learning
-Deep learning
-Large language models
-RAG
-LoRA
-AI learning agent design
-AI ethics and learning boundaries
-2. Local Gemma4 Inference
+人工智能基础概念
+Python 入门路线
+数据处理基础
+机器学习入门
+模型评估指标
+深度学习基础
+大模型基础
+RAG 检索增强生成
+LoRA 微调入门
+学习智能体设计
+四周 AI 入门计划
+AI 伦理与学习边界
+2. Gemma4 本地推理
 
-The backend is designed to connect to a local OpenAI-compatible vLLM service.
+系统后端通过 OpenAI-compatible 接口调用本地 vLLM 服务。
 
-Typical vLLM service:
+示例启动方式：
 
 vllm serve /path/to/gemma-4-12B-it \
   --host 0.0.0.0 \
@@ -113,64 +114,56 @@ vllm serve /path/to/gemma-4-12B-it \
   --dtype bfloat16 \
   --max-model-len 8192
 
-The FastAPI backend calls this local model endpoint for generation.
+FastAPI 后端会调用该本地模型服务完成回答生成。
 
-3. Web Frontend
+3. Web 前端学习助手
 
-The frontend provides a browser-based learning assistant interface.
+前端提供浏览器交互界面，支持：
 
-Supported functions include:
+与学习智能体对话
+基于知识库进行问答
+查看历史会话
+重命名和删除会话
+导出会话
+对回答进行质量评分
+标记回答是否可作为 LoRA 训练样本
 
-Chat with the learning assistant
-Knowledge-based question answering
-Conversation history
-Conversation rename and delete
-Conversation export
-Response quality rating
-Marking answers as LoRA training candidates
+前端文件位于：
 
-Frontend files:
+app/frontend/
+4. 对话记忆与反馈系统
 
-app/frontend/index.html
-app/frontend/app.js
-app/frontend/styles.css
-4. Persistent Conversation Memory
+系统使用 SQLite 保存对话历史和反馈信息，包括：
 
-Conversation history is stored with SQLite.
+会话信息
+用户消息
+助手回答
+RAG 检索证据
+使用的模型信息
+回答质量评分
+是否加入 LoRA 训练样本
 
-The system stores:
+运行时数据库不会上传到 GitHub，避免泄露真实对话内容。
 
-Conversation metadata
-User messages
-Assistant messages
-Retrieved evidence
-Model information
-Response quality feedback
-LoRA training selection flags
+5. LoRA 数据闭环
 
-The runtime database is ignored by Git and should not be uploaded publicly.
+用户可以对高质量回答进行评分，并勾选为训练样本。随后可以通过脚本将这些样本导出为 LoRA 微调数据集。
 
-5. Feedback-Driven LoRA Data Collection
-
-The system supports response-level feedback.
-
-A user can mark high-quality answers as training candidates. These selected samples can then be exported into a JSONL dataset for LoRA fine-tuning.
-
-Export script:
+导出脚本：
 
 app/backend/build_lora_dataset_v1.py
 
-Typical output format:
+典型数据格式：
 
 {
   "messages": [
     {
       "role": "user",
-      "content": "What is RAG?"
+      "content": "RAG 是什么？"
     },
     {
       "role": "assistant",
-      "content": "RAG means retrieval-augmented generation..."
+      "content": "RAG 是检索增强生成，系统会先从知识库中检索相关资料，再让大模型基于资料生成回答。"
     }
   ],
   "meta": {
@@ -179,96 +172,77 @@ Typical output format:
     "conversation_id": "..."
   }
 }
-Quick Start
-1. Clone the repository
+五、快速开始
+1. 克隆项目
 git clone https://github.com/qianmo123321/gemma4-learning-agent.git
 cd gemma4-learning-agent
-2. Create backend environment
+2. 安装后端依赖
 cd app/backend
 pip install -r requirements.txt
-3. Configure environment variables
-
-Copy the example environment file:
-
+3. 配置环境变量
 cp .env.example .env
-
-Then edit .env according to your local model path, vLLM endpoint, database path, and knowledge base settings.
-
 nano .env
-4. Start vLLM
 
-Start your local Gemma4 vLLM service separately. Example:
+根据自己的模型路径、vLLM 地址、数据库路径和知识库路径修改 .env。
 
+4. 启动 vLLM
 vllm serve /path/to/gemma-4-12B-it \
   --host 0.0.0.0 \
   --port 8001 \
   --dtype bfloat16 \
   --max-model-len 8192
-5. Start backend
+5. 启动后端服务
 cd app/backend
 uvicorn app.main:app --host 0.0.0.0 --port 8000
-6. Serve frontend
+6. 部署前端
 
-The frontend can be served through Nginx or any static file server. For deployment, see:
+前端可以通过 Nginx 或任意静态文件服务部署。
+
+部署说明可参考：
 
 app/README_DEPLOY_CN.md
 app/deploy/nginx.conf
-Deployment
+六、LoRA 数据导出
 
-Deployment scripts are provided in:
-
-app/deploy/
-
-They include environment setup, vLLM startup, development startup, Nginx configuration, and systemd service examples.
-
-For Chinese deployment notes, see:
-
-app/README_DEPLOY_CN.md
-LoRA Dataset Export
-
-After collecting conversation feedback, run:
+在收集足够多的高质量反馈样本后，执行：
 
 cd app/backend
 python build_lora_dataset_v1.py
 
-The script exports high-quality selected samples from the SQLite conversation database.
+推荐数据规模：
 
-Recommended dataset sizes:
+小规模功能验证：50～100 条高质量样本
+初步 LoRA 训练：300～1000 条高质量样本
+稳定行为风格微调：1000 条以上高质量样本
+七、仓库不包含的内容
 
-Small functional validation: 50-100 high-quality samples
-Initial LoRA training:       300-1000 high-quality samples
-Stable behavior tuning:      1000+ high-quality samples
-What Is Not Included
+出于安全和存储考虑，本仓库不包含：
 
-For security and storage reasons, this repository does not include:
+Gemma4 模型权重
+Hugging Face 缓存
+Conda 环境
+SQLite 运行数据库
+私有 .env 配置文件
+API Key 或访问 Token
+大型训练检查点
 
-Gemma4 model weights
-Hugging Face cache
-Conda environments
-Runtime SQLite database
-Private .env files
-API keys or access tokens
-Large training checkpoints
+这些文件均已通过 .gitignore 排除。
 
-These files are ignored by .gitignore.
+八、适用场景
 
-Intended Use
+本项目适合用于：
 
-This project is intended for:
+人工智能教学展示
+私有学习智能体原型开发
+RAG 课程资料问答
+LoRA 微调数据采集
+本地大模型应用开发实验
+教学平台或智能助教项目验证
 
-AI education demonstrations
-Private learning assistant prototypes
-RAG-based course material question answering
-Feedback-driven LoRA data collection
-Lightweight local LLM application development
+当前项目仍属于教育原型系统，不是生产级多用户平台。
 
-It is currently an educational prototype rather than a production-ready multi-user system.
-
-Repository
-
-GitHub:
-
+九、GitHub 仓库
 https://github.com/qianmo123321/gemma4-learning-agent
-License
+十、说明
 
-No license has been specified yet. Please contact the repository owner before using this project for commercial purposes.
+本项目仅用于学习、研究和教学展示。正式部署到公网前，建议进一步补充用户权限管理、数据隔离、访问控制、日志审计和安全策略。
